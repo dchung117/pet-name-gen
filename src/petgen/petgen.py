@@ -1,5 +1,7 @@
 from typing import Optional
 from langchain.llms import OpenAI
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
 
 def generate_pet_name(pet: str,
     n: int = 5,
@@ -22,6 +24,17 @@ def generate_pet_name(pet: str,
     """
     llm = OpenAI(temperature=temp)
 
-    names = llm(f"I have a pet {pet} and I want to give it a cool name. Give me {n} names.")
+    prompt_template = PromptTemplate(
+        input_variables = ["pet", "n"],
+        template = "I have a pet {pet} and I want to give it a cool name. Give me {n} names."
+    )
+    chain = LLMChain(
+        llm=llm,
+        prompt=prompt_template
+    )
 
-    return names
+    response = chain(
+        {"pet": pet, "n": n}
+    )
+
+    return response
