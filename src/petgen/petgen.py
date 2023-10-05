@@ -5,6 +5,7 @@ from langchain.chains import LLMChain
 
 def generate_pet_name(pet: str,
     n: int = 5,
+    color: Optional[str] = None,
     temp: Optional[float] = 0.7) -> str:
     """
     Use OpenAI API to generate pet names.
@@ -15,7 +16,9 @@ def generate_pet_name(pet: str,
             Type of pet (e.g. dog, cat, fish, etc.)
         n: int = 5
             Number of names to generate.
-        temp: float = 0.7
+        color: Optional[str] = None
+            Optionally mention pet color to generate names.
+        temp: Optional[float] = 0.7
             Temperature for sampling during text generation.
     Return
     ------
@@ -24,9 +27,17 @@ def generate_pet_name(pet: str,
     """
     llm = OpenAI(temperature=temp)
 
+    prompt = "I have a pet {pet} and I want to give it a cool name."
+    input_variables = ["pet", "n"]
+    input_dict = {"pet": pet, "n": n}
+    if color:
+        prompt += " It is {color} in color."
+        input_variables.append("color")
+        input_dict["color"] = color
+    prompt += " Give me {n} names."
     prompt_template = PromptTemplate(
-        input_variables = ["pet", "n"],
-        template = "I have a pet {pet} and I want to give it a cool name. Give me {n} names."
+        input_variables = input_variables,
+        template = prompt
     )
     chain = LLMChain(
         llm=llm,
@@ -34,7 +45,7 @@ def generate_pet_name(pet: str,
     )
 
     response = chain(
-        {"pet": pet, "n": n}
+        input_dict
     )
 
     return response
