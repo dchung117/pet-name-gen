@@ -1,9 +1,16 @@
-from dotenv import load_dotenv
 from petgen.petgen import generate_pet_name
+import streamlit as st
 
-if __name__ == "__main__":
-    load_dotenv()
+st.title("Pet Name Generator")
 
-    response = generate_pet_name("dog", color="red")
-    print("Our pet dog names: ")
-    print(response["text"])
+pet_type = st.text_input("What kind of pet do you have?",
+    value="dog",
+    max_chars=15)
+pet_color = st.text_input(f"What color is your {pet_type}?",
+    max_chars=15)
+
+gen_button = st.button("Generate pet names!")
+
+if gen_button:
+    response = generate_pet_name(pet_type, color=pet_color)
+    st.text(response["pet_names"])

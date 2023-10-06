@@ -1,7 +1,11 @@
+from dotenv import load_dotenv
+
 from typing import Optional
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
+
+load_dotenv()
 
 def generate_pet_name(pet: str,
     n: int = 5,
@@ -41,7 +45,8 @@ def generate_pet_name(pet: str,
     )
     chain = LLMChain(
         llm=llm,
-        prompt=prompt_template
+        prompt=prompt_template,
+        output_key="pet_names"
     )
 
     response = chain(

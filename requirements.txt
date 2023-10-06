@@ -34,6 +34,7 @@ numpy==1.26.0
 openai==0.28.1
 packaging==23.2
 pandas==2.1.1
+-e git+https://github.com/dchung117/pet-name-gen.git@94347d772131728d92d0df2a08964516af0fbffd#egg=petgen
 Pillow==10.0.1
 protobuf==4.24.4
 pyarrow==13.0.0
@@ -65,5 +66,6 @@ tzdata==2023.3
 tzlocal==5.1
 urllib3==2.0.6
 validators==0.22.0
+watchdog==3.0.0
 yarl==1.9.2
 zipp==3.17.0
