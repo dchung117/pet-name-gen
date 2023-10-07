@@ -4,6 +4,7 @@ from typing import Optional
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
+from langchain.agents import load_tools, initialize_agent, AgentType, AgentExecutor
 
 load_dotenv()
 
@@ -54,3 +55,29 @@ def generate_pet_name(pet: str,
     )
 
     return response
+
+def get_agent(temp: Optional[float] = 0.5) -> AgentExecutor:
+    """
+    Create an agent w/ OpenAI LLM and access to Wikipedia and llm-math libaries.
+
+    Args
+    ----
+        temp: Optional[float] = 0.5
+            Temperature for sampling during text generation
+    Return
+    ------
+        AgentExecutor
+            Langchain agent
+
+    """
+    llm = OpenAI(temperature=temp)
+
+    tools = load_tools(["wikipedia", "llm-math"],
+        llm=llm)
+
+    agent = initialize_agent(tools,
+        llm,
+        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+        verbose=True)
+
+    return agent
